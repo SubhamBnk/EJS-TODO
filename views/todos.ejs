@@ -1,88 +1,119 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="<%= csrfToken %>">
-    <link rel="stylesheet" href="./css/style.css">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <title>To-Do manager</title>
-    <script>
-        var token = document
-            .querySelector('meta[name="csrf-token"]')
-            .getAttribute("content");
-        function updateTodo(id) {
-            const check = document.getElementById(`value${id}`).checked;
-            fetch(`/todos/${id}`,{
-                method: "put",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    "_csrf": token,
-                    completed: check,
-                }),
-            })
-                .then((res) => {
-                    if(res.ok){
-                    window.location.reload();
-                    }
-                })
-                .catch((err) => console.log(err));
-        }
-        function deleteTodo(id) {
-            fetch(`/todos/${id}`,{
-                method: "delete",
-                headers: { "Content-Type": "application/json"},
-                body: JSON.stringify({
-                    "_csrf": token
-                })
-            })
-                .then((res) => {
-                    if(res.ok){
-                    window.location.reload();
-                    }
-                })
-                .catch((err) => console.log(err));
-        }
-    </script>
-</head>
-<body>
-    <body>
-        <div class="grid grid-cols-6">
-            <div class="col-start-3 col-span-2">
-                <%- include('header.ejs') %>
-                <p class="text-gray-600 my-1">Hello <%= userName %></p>
-                <a class="text-green-600" href="/signout">Sign out</a>
-                <form action="/todos" method="post">
-                    <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
-                    <div class="flex gap-2 py-4">
-                        <div class="flex-auto">
-                            <input type="text" name="title" placeholder="what's next?" class="border border-gray-300 rounded w-full text-gray-900 p-2 text-sm">
-                        </div>
-                        <div class="flex-auto">
-                            <input type="date" name="dueDate" class="border border-gray-300 rounded w-full text-gray-900 p-2 text-sm leading-4" />
-                        </div>
-                        <div class="flex-none">
-                            <button type="submit" class="bg-green-600 text-white px-5 py-1.5 rounded font-medium mr-2 mb-2">Add</button>
-                        </div>
-                    </div>
-                </form>
-                <div>
-                    <% if (messages && messages.error && messages.error.length > 0) { %>
-                        <% for(var i=0; i<messages.error.length; i++) { %>
-                            <p class="bg-red-100 my-3 list-none rounded px-4 py-2"><%= messages.error[i] %></p>
-                        <% } %>
-                    <% } %>
-                </div>
-                <div>
-                    <%- include('todo.ejs', {title: "Overdue", data: overduetodos}) %> <%-
-                    include('todo.ejs', {title: "Due Today", data: duetodaytodos}) %> <%-
-                    include('todo.ejs', {title: "Due Later", data: duelatertodos}) %> <%-
-                    include('todo.ejs', {title: "Completed Items", data: completed}) %>
-                </div>
-            </div>
-        </div>
-        
-      </body>
-</body>
-</html>
+<div>
+  <h5 class="font-semibold">Overdue</h5>
+  <b id="count-overdue">3</b>
+  <ul class="list-none">
+    <li class="todo-item">
+      <div
+        class="flex items-center w-fit my-2 px-2 py-1 rounded hover:shadow-md hover:bg-slate-700"
+      >
+        <input
+          id="todo-checkbox-1"
+          type="checkbox"
+          class="w-4 h-4 text-blue-600 rounded"
+        />
+        <label class="text-gray-300 cursor-pointer ml-2" for="todo-checkbox-1">
+          Complete Project
+        </label>
+        <%- include('deleteIcon.ejs') %>
+      </div>
+    </li>
+    <li class="todo-item">
+      <div
+        class="flex items-center w-fit my-2 px-2 py-1 rounded hover:shadow-md hover:bg-slate-700"
+      >
+        <input
+          id="todo-checkbox-2"
+          type="checkbox"
+          class="w-4 h-4 text-blue-600 rounded"
+        />
+        <label class="text-gray-300 cursor-pointer ml-2" for="todo-checkbox-2">
+          Prepare for the exam
+        </label>
+        <%- include('deleteIcon.ejs') %>
+      </div>
+    </li>
+    <li class="todo-item">
+      <div
+        class="flex items-center w-fit my-2 px-2 py-1 rounded hover:shadow-md hover:bg-slate-700"
+      >
+        <input
+          id="todo-checkbox-3"
+          type="checkbox"
+          class="w-4 h-4 text-blue-600 rounded"
+        />
+        <label class="text-gray-300 cursor-pointer ml-2" for="todo-checkbox-3">
+          Throw out the trash
+        </label>
+        <%- include('deleteIcon.ejs') %>
+      </div>
+    </li>
+  </ul>
+  <h5 class="font-semibold">Due Today </h5>
+  <b id="count-due-today"> 2</b>
+  <ul>
+    <li class="todo-item">
+      <div
+        class="flex items-center w-fit my-2 px-2 py-1 rounded hover:shadow-md hover:bg-slate-700"
+      >
+        <input
+          id="todo-checkbox-4"
+          type="checkbox"
+          class="w-4 h-4 text-blue-600 rounded"
+        />
+        <label class="text-gray-300 cursor-pointer ml-2" for="todo-checkbox-4">
+          Fill the exam form
+        </label>
+        <%- include('deleteIcon.ejs') %>
+      </div>
+    </li>
+    <li class="todo-item">
+      <div
+        class="flex items-center w-fit my-2 px-2 py-1 rounded hover:shadow-md hover:bg-slate-700"
+      >
+        <input
+          id="todo-checkbox-5"
+          type="checkbox"
+          class="w-4 h-4 text-blue-600 rounded"
+        />
+        <label class="text-gray-300 cursor-pointer ml-2" for="todo-checkbox-5">
+          Meet with the professor
+        </label>
+        <%- include('deleteIcon.ejs') %>
+      </div>
+    </li>
+  </ul>
+  <h5 class="font-semibold">Due Later </h5>
+  <b id="count-due-later"> 2</b>
+  <ul>
+    <li class="todo-item">
+      <div
+        class="flex items-center w-fit my-2 px-2 py-1 rounded hover:shadow-md hover:bg-slate-700"
+      >
+        <input
+          id="todo-checkbox-6"
+          type="checkbox"
+          class="w-4 h-4 text-blue-600 rounded"
+        />
+        <label class="text-gray-300 cursor-pointer ml-2" for="todo-checkbox-6">
+          Complete assignments
+        </label>
+        <%- include('deleteIcon.ejs') %>
+      </div>
+    </li>
+    <li class="todo-item">
+      <div
+        class="flex items-center w-fit my-2 px-2 py-1 rounded hover:shadow-md hover:bg-slate-700"
+      >
+        <input
+          id="todo-checkbox-7"
+          type="checkbox"
+          class="w-4 h-4 text-blue-600 rounded"
+        />
+        <label class="text-gray-300 cursor-pointer ml-2" for="todo-checkbox-7">
+          Recharge the phone
+        </label>
+        <%- include('deleteIcon.ejs') %>
+      </div>
+    </li>
+  </ul>
+</div>
