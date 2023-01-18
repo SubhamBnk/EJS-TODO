@@ -11,6 +11,7 @@ function extractCsrfToken(res) {
   return $("[name=_csrf]").val();
 }
 
+
 describe("Todo test suite ", () => {
   beforeAll(async () => {
     await db.sequelize.sync({ force: true });
@@ -69,7 +70,8 @@ describe("Todo test suite ", () => {
       completed: false,
       _csrf: csrfToken,
     });
-   
+
+    
     const gropuedTodosResponse = await agent
       .get("/")
       .set("Accept", "application/json");
